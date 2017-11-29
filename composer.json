@@ -7,7 +7,7 @@
     },
     "autoload": {
         "psr-4": {
-            "huang007guo\\ycc-sdk\\": "src/"
+            "huang007guo\\yccSdk\\": "src/"
         }
     },
     "authors": [
