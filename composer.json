@@ -1,0 +1,19 @@
+{
+    "name": "huang007guo/ycc-sdk",
+    "description": "yicuicui api sdk",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "huang007guo\\ycc-sdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "huangguoliang",
+            "email": "huangguoliang@xiaochong.com"
+        }
+    ]
+}
