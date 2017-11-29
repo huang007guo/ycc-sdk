@@ -20,7 +20,11 @@ class ApiResultFormatException extends \Exception  implements YccSdkException
 
     public function __construct($message, $code, $rawResponseBody)
     {
-        parent::__construct($message, $code, null);
+        parent::__construct($message, $code);
+        $this->rawResponseBody = $rawResponseBody;
+    }
+    public function getRawResponseBody(){
+        return $this->rawResponseBody;
     }
 
     public static function throwErr($rawResponseBody, $message = 'Api Result Format Error', $code = 0){

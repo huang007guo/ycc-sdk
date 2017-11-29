@@ -10,7 +10,10 @@ namespace Huang007guo\YccSdk\Lib\Http;
 
 
 use GuzzleHttp\Client;
+use Huang007guo\YccSdk\Constant\Code;
+use Huang007guo\YccSdk\Exceptions\ApiResultException;
 use Huang007guo\YccSdk\Exceptions\ApiResultFormatException;
+use Huang007guo\YccSdk\YccSdk;
 
 class HttpClientYcc implements HttpClientInterface
 {
@@ -18,23 +21,31 @@ class HttpClientYcc implements HttpClientInterface
      * @var Client
      */
     protected $httpHandler;
-    protected $accessToken = '';
-    public function __construct()
+    /**
+     * @var YccSdk
+     */
+    protected $yccSdk;
+    public function __construct(YccSdk $yccSdk = null)
     {
         $this->httpHandler = new Client();
+        $this->yccSdk = $yccSdk;
+    }
+    public function setYccSdk(YccSdk $yccSdk)
+    {
+        $this->yccSdk = $yccSdk;
     }
 
     public function get($url, $param){
-        $result = $this->request('get', $url, [
+        $resultData = $this->request('get', $url, [
             'query' => $param,
         ]);
-        return $result;
+        return $resultData;
     }
     public function post($url, $param){
-        $result = $this->request('post', $url, [
+        $resultData = $this->request('post', $url, [
             'form_params' => $param,
         ]);
-        return $result;
+        return $resultData;
     }
     public function postFile($url, $param){
         $multipart = [];
@@ -44,15 +55,25 @@ class HttpClientYcc implements HttpClientInterface
                 'contents' => $value,
             ];
         }
-        $result = $this->request('post', $url, [
+        $resultData = $this->request('post', $url, [
             'multipart' => $multipart,
         ]);
-        return $result;
+        return $resultData;
     }
+
+    /**
+     * 请求 api
+     * @param $method
+     * @param string $uri
+     * @param array $options
+     * @return mixed 成功返回 result['data']
+     * @throws ApiResultFormatException json_decode 后没有code 抛出异常
+     * @throws ApiResultException json_decode 后没有code!=Code::GOD_BLESS_YOU  抛出异常
+     */
     protected function request($method, $uri = '', array $options = []){
         $baseOpt = [
             'headers' => [
-                'X-Ycc-Access-Token'=>$this->accessToken,
+                'X-Ycc-Access-Token'=>$this->yccSdk->getAccessToken(),
                 'Accept'=>'application/json',
             ]
         ];
@@ -63,6 +84,13 @@ class HttpClientYcc implements HttpClientInterface
         if(!isset($result['code'])){
             ApiResultFormatException::throwErr($rawResponseBody);
         }
-        return $result;
+        if($result['code'] != Code::GOD_BLESS_YOU){
+            ApiResultException::throwErr(
+                $result['code'],
+                isset($result['msg']) ? $result['msg'] : '',
+                isset($result['data']) ? $result['data'] : null
+            );
+        }
+        return isset($result['data']) ? $result['data'] : true;
     }
 }

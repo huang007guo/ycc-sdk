@@ -17,8 +17,10 @@ class Code
     const ARG_INVALID = 401;
     const NOT_PERMISSION= 403;
     const NOT_DATA= 406;
-
     const FAIL = 501;
+    //在返回结果正确 code == GOD_BLESS_YOU 但是没有正确的返回参数时使用
+    const RET_ARG_ERROR = 402;
+
     //业务类-----------------
     const APP_NOT_EXIST = 600;
     const APP_STATUS_NOT_OPEN = 601;
