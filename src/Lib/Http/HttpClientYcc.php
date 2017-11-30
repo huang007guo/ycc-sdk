@@ -69,7 +69,6 @@ class HttpClientYcc implements HttpClientInterface
     protected function request($method, $uri = '', array $options = []){
         $baseOpt = [
             'headers' => [
-                //todo 这里存在死循环调用问题
                 'X-Ycc-Access-Token'=>$this->accessToken,
                 'Accept'=>'application/json',
             ]
