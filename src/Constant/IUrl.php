@@ -12,6 +12,6 @@ namespace Huang007guo\YccSdk\Constant;
 class IUrl extends UrlBase
 {
     const ACCESS_TOKEN = 'api/accessToken';
-
+    const API_TEST = 'api/test';
     public static $host = 'http://i.yicuicui.com';
 }
