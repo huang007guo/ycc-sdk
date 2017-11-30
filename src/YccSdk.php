@@ -32,7 +32,7 @@ class YccSdk
     public function __construct($appKey = '', $appSecret = ''){
         $this->_appKey = $appKey;
         $this->_appSecret = $appSecret;
-        $this->_httpClientYcc = new HttpClientYcc($this);
+        $this->_httpClientYcc = new HttpClientYcc();
     }
 
     /**
@@ -72,6 +72,19 @@ class YccSdk
         $this->_accessToken = $accessToken;
         $this->_accessTokenExpiresTime = $accessTokenExpiresTime;
     }
+
+    // ------------------------ 业务API ------------------------------
+    /**
+     * i平台提供的测试API
+     * @return string 返回字符串 "调用成功" 为调用成功
+     */
+    public function IApiTest(){
+        $this->_httpClientYcc->setAccessToken($this->getAccessToken());
+        return $this->_httpClientYcc->get($this->getIUrl(IUrl::API_TEST));
+    }
+    // ------------------------ 业务API ------------------------------
+
+
     protected function getIUrl($uri){
         return IUrl::getUrl($uri);
     }
