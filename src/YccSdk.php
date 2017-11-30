@@ -61,16 +61,16 @@ class YccSdk
         if (empty($result['access_token']) || empty($result['expires_in'])){
             ApiResultException::throwErr(Code::RET_ARG_ERROR, 'Api Result Error', $result);
         }
-        $this->setAccessToken($result['access_token'], $result['expires_in']);
+        // 设置accessToken,过期时间; 过期时间预留10秒
+        $this->setAccessToken($result['access_token'], (time() + $result['expires_in'] - 10));
     }
     /**
      * @param $accessToken
-     * @param $expiresIn int 凭证有效时间，单位：秒 这个值为null时代表不考虑过期时间
+     * @param $accessTokenExpiresTime int|null 凭证有效时间，单位：秒 这个值为null时代表不考虑过期时间
      */
-    public function setAccessToken($accessToken, $expiresIn){
+    public function setAccessToken($accessToken, $accessTokenExpiresTime = null){
         $this->_accessToken = $accessToken;
-        //过期时间 预留10秒
-        $this->_accessTokenExpiresTime = time() + $expiresIn - 10;
+        $this->_accessTokenExpiresTime = $accessTokenExpiresTime;
     }
     protected function getIUrl($uri){
         return IUrl::getUrl($uri);
