@@ -13,7 +13,6 @@ use GuzzleHttp\Client;
 use Huang007guo\YccSdk\Constant\Code;
 use Huang007guo\YccSdk\Exceptions\ApiResultException;
 use Huang007guo\YccSdk\Exceptions\ApiResultFormatException;
-use Huang007guo\YccSdk\YccSdk;
 
 class HttpClientYcc implements HttpClientInterface
 {
@@ -21,18 +20,15 @@ class HttpClientYcc implements HttpClientInterface
      * @var Client
      */
     protected $httpHandler;
-    /**
-     * @var YccSdk
-     */
-    protected $yccSdk;
-    public function __construct(YccSdk $yccSdk = null)
+    protected $accessToken;
+    public function __construct($accessToken = '')
     {
         $this->httpHandler = new Client();
-        $this->yccSdk = $yccSdk;
+        $this->accessToken = $accessToken;
     }
-    public function setYccSdk(YccSdk $yccSdk)
+    public function setAccessToken($accessToken)
     {
-        $this->yccSdk = $yccSdk;
+        $this->accessToken = $accessToken;
     }
 
     public function get($url, $param){
@@ -73,7 +69,8 @@ class HttpClientYcc implements HttpClientInterface
     protected function request($method, $uri = '', array $options = []){
         $baseOpt = [
             'headers' => [
-                'X-Ycc-Access-Token'=>$this->yccSdk->getAccessToken(),
+                //todo 这里存在死循环调用问题
+                'X-Ycc-Access-Token'=>$this->accessToken,
                 'Accept'=>'application/json',
             ]
         ];

@@ -3,6 +3,7 @@
     "description": "yicuicui api sdk",
     "type": "library",
     "require": {
+        "php": ">=5.6",
         "guzzlehttp/guzzle": "~6.0"
     },
     "autoload": {
