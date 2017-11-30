@@ -31,7 +31,7 @@ class HttpClientYcc implements HttpClientInterface
         $this->accessToken = $accessToken;
     }
 
-    public function get($url, $param){
+    public function get($url, $param = null){
         $resultData = $this->request('get', $url, [
             'query' => $param,
         ]);
